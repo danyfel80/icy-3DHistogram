@@ -126,8 +126,8 @@ public class Histogram3D {
         }
       }
     }
-    
-    return proba / (double)numVox;
+
+    return proba / (double) numVox;
   }
 
 }
