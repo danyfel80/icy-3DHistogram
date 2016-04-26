@@ -61,10 +61,15 @@ public class Histogram3DWeightedOverlay extends Overlay implements VtkPainter {
 					if (val > 0) {
 						int ptID = pts.InsertNextPoint(x, y, z);
 						ptsArr.InsertNextCell(ptID);
-						byteVals[numT + 0] = (byte)x;
-						byteVals[numT + 1] = (byte)y;
-						byteVals[numT + 2] = (byte)z;
-						byteVals[numT + 3] = (byte)(Math.log((double) val) / Math.log(maxVal) * 255.0);
+						final byte v0 = (byte)x;
+						final byte v1 = (byte)y;
+						final byte v2 = (byte)z;
+						final byte v3 = (byte)(Math.log((double) val) / Math.log(maxVal) * 255.0);
+						
+						byteVals[numT + 0] = v0;
+						byteVals[numT + 1] = v1;
+						byteVals[numT + 2] = v2;
+						byteVals[numT + 3] = v3;
 						numT+=4;
 					}
 				}
