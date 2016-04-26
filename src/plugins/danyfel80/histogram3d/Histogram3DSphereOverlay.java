@@ -68,6 +68,7 @@ public class Histogram3DSphereOverlay extends Overlay implements VtkPainter {
 						spActor.SetMapper(spPDM);
 
 						r = (double)val / (double)maxSum;
+						//r = Math.log(val) / Math.log(maxSum);
 						spSrc.SetCenter(new double[] { cX, cY, cZ });
 						spSrc.SetRadius(r * binSize / 2.0);
 						final double colR = (double)cX/256.0, colG = (double)cY/256.0, colB = (double)cZ/256.0;

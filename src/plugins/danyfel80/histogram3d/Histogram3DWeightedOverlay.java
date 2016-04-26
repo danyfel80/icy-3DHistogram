@@ -40,20 +40,39 @@ public class Histogram3DWeightedOverlay extends Overlay implements VtkPainter {
 		colors.SetName("Colors");
 
 		int maxVal = (int) counts.getChannelMax(0);
+		int numTups = 0;
 		int[][] countsData = counts.getDataXYZAsInt(0, 0);
+		
+		int sxy = counts.getSizeY()*counts.getSizeX(), sz = counts.getSizeZ();
+		for (int z = 0; z < sz; z++) {
+			for (int y = 0; y < sxy; y++) {
+				if (countsData[z][y] > 0) numTups++;
+			}
+		}
+		final int numFTups = numTups;
+		colors.SetNumberOfTuples(numFTups);
+		final byte[] byteVals = new byte[numFTups*4];
+		
+		int numT = 0;
 		for (int z = 0; z < counts.getSizeZ(); z++) {
 			for (int y = 0; y < counts.getSizeY(); y++) {
 				for (int x = 0; x < counts.getSizeX(); x++) {
 					int val = countsData[z][y * counts.getSizeX() + x];
 					if (val > 0) {
 						int ptID = pts.InsertNextPoint(x, y, z);
-						colors.InsertNextTuple4(x, y, z, (int) (Math.log((double) val) / Math.log(maxVal) * 255.0));
 						ptsArr.InsertNextCell(ptID);
+						byteVals[numT + 0] = (byte)x;
+						byteVals[numT + 1] = (byte)y;
+						byteVals[numT + 2] = (byte)z;
+						byteVals[numT + 3] = (byte)(Math.log((double) val) / Math.log(maxVal) * 255.0);
+						numT+=4;
 					}
 				}
 			}
 		}
-
+		colors.SetJavaArray(byteVals);
+    colors.Modified();
+    
 		pData.GetPointData().SetScalars(colors);
 		vtkPolyDataMapper mapper = new vtkPolyDataMapper();
 		pointsActor = new vtkActor();
