@@ -81,6 +81,7 @@ public class Histogram3DWeightedOverlay extends Overlay implements VtkPainter {
 		pData.GetPointData().SetScalars(colors);
 		vtkPolyDataMapper mapper = new vtkPolyDataMapper();
 		pointsActor = new vtkActor();
+		pointsActor.SetPickable(0);
 		pointsActor.GetProperty().SetOpacity(0.9999);
 		mapper.SetInputData(pData);
 		pointsActor.SetMapper(mapper);
